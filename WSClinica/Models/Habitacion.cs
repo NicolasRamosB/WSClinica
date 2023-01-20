@@ -9,7 +9,7 @@ namespace WSClinica.Models
     {
         public int Id { get; set; }
 
-        [Range(1, 100, ErrorMessage ="Solo se permiten números entre 1 y 100")]
+        [RegularExpression(@"^[A]{3}\s+[1-100]{3}$", ErrorMessage = "Solo se permiten numeros entre 1 y 100")]
         public string Numero { get; set; }
 
         [Required]
