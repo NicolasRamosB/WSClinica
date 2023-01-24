@@ -8,14 +8,9 @@ namespace WSClinica.Models
     public class Especialidad
     {
         [Key]
-        public int EspecialidadId { get; set; }
+        public int Id { get; set; }
+        public string Nombre { get; set; }
 
-        [Column(TypeName = "varchar(50)")]
-        [Required]
-        public string Nombre { get;set; }
-
-        
         public List<Medico> Medicos { get; set; }
-        
     }
 }

@@ -2,7 +2,7 @@
 
 namespace WSClinica.Migrations
 {
-    public partial class regularExpression : Migration
+    public partial class cuatro : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

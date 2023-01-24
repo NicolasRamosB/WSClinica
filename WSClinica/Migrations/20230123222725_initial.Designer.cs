@@ -10,8 +10,8 @@ using WSClinica.Data;
 namespace WSClinica.Migrations
 {
     [DbContext(typeof(DBClinicaContext))]
-    [Migration("20230120212101_regularExpression")]
-    partial class regularExpression
+    [Migration("20230123222725_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,14 +23,14 @@ namespace WSClinica.Migrations
 
             modelBuilder.Entity("WSClinica.Models.Clinica", b =>
                 {
-                    b.Property<int>("ClinicaId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(60)");
 
                     b.Property<DateTime?>("FechaInicioActividades")
                         .HasColumnType("datetime2");
@@ -39,23 +39,22 @@ namespace WSClinica.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.HasKey("ClinicaId");
+                    b.HasKey("Id");
 
-                    b.ToTable("Clinica");
+                    b.ToTable("Clinicas");
                 });
 
             modelBuilder.Entity("WSClinica.Models.Especialidad", b =>
                 {
-                    b.Property<int>("EspecialidadId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("EspecialidadId");
+                    b.HasKey("Id");
 
                     b.ToTable("Especialidad");
                 });
@@ -72,16 +71,16 @@ namespace WSClinica.Migrations
 
                     b.Property<string>("Estado")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(60)");
 
-                    b.Property<string>("Numero")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Numero")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClinicaId");
 
-                    b.ToTable("Habitacion");
+                    b.ToTable("Habitaciones");
                 });
 
             modelBuilder.Entity("WSClinica.Models.Medico", b =>
@@ -95,10 +94,10 @@ namespace WSClinica.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int?>("ClinicaId")
-                        .HasColumnType("int");
+                    b.Property<string>("EspecialidadId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EspecialidadId")
+                    b.Property<int?>("EspecialidadId1")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("FechaNacimiento")
@@ -113,9 +112,7 @@ namespace WSClinica.Migrations
 
                     b.HasKey("IdMedico");
 
-                    b.HasIndex("ClinicaId");
-
-                    b.HasIndex("EspecialidadId");
+                    b.HasIndex("EspecialidadId1");
 
                     b.ToTable("Medico");
                 });
@@ -131,9 +128,6 @@ namespace WSClinica.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int?>("ClinicaId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("MedicoIdMedico")
                         .HasColumnType("int");
 
@@ -145,8 +139,6 @@ namespace WSClinica.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClinicaId");
 
                     b.HasIndex("MedicoIdMedico");
 
@@ -164,25 +156,15 @@ namespace WSClinica.Migrations
 
             modelBuilder.Entity("WSClinica.Models.Medico", b =>
                 {
-                    b.HasOne("WSClinica.Models.Clinica", "Clinica")
-                        .WithMany("Medico")
-                        .HasForeignKey("ClinicaId");
-
                     b.HasOne("WSClinica.Models.Especialidad", "Especialidad")
                         .WithMany("Medicos")
-                        .HasForeignKey("EspecialidadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EspecialidadId1");
                 });
 
             modelBuilder.Entity("WSClinica.Models.Paciente", b =>
                 {
-                    b.HasOne("WSClinica.Models.Clinica", "Clinica")
-                        .WithMany("Paciente")
-                        .HasForeignKey("ClinicaId");
-
                     b.HasOne("WSClinica.Models.Medico", "Medico")
-                        .WithMany("Paciente")
+                        .WithMany("Pacientes")
                         .HasForeignKey("MedicoIdMedico");
                 });
 #pragma warning restore 612, 618

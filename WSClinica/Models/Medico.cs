@@ -8,26 +8,27 @@ namespace WSClinica.Models
     [Table("Medico")]
     public class Medico
     {
+
         [Key]
         public int IdMedico { get; set; }
 
-        [Column(TypeName ="varchar(50)")]
         [Required]
-        public string Nombre { get; set;}
         [Column(TypeName = "varchar(50)")]
+        public string Apellido { get; set; }
+
         [Required]
-        public string Apellido { get; set;}
+        [Column(TypeName = "varchar(50)")]
+        public string Nombre { get; set; }
 
-        public int Matricula { get; set;}
-        public DateTime ? FechaNacimiento { get; set;}
+        public int Matricula { get; set; }
+        public DateTime ? FechaNacimiento { get; set; }
+        public List<Paciente> Pacientes { get; set; }
 
-       
-        public int EspecialidadId { get;set;}
+        public int EspecialidadId { get; set; }
+
         [ForeignKey("EspecialidadId")]
-        public Especialidad Especialidad { get; set;}
+        public Especialidad Especialidad { get; set; }
 
-        public List<Paciente> Paciente { get; set;}
-        public Clinica Clinica { get; set; }
-
+        
     }
 }

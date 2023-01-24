@@ -8,51 +8,51 @@ namespace WSClinica.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Clinica",
+                name: "Clinicas",
                 columns: table => new
                 {
-                    ClinicaId = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nombre = table.Column<string>(type: "varchar(50)", nullable: false),
                     FechaInicioActividades = table.Column<DateTime>(nullable: true),
-                    Email = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Email = table.Column<string>(type: "varchar(60)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clinica", x => x.ClinicaId);
+                    table.PrimaryKey("PK_Clinicas", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Especialidad",
                 columns: table => new
                 {
-                    EspecialidadId = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombre = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Nombre = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Especialidad", x => x.EspecialidadId);
+                    table.PrimaryKey("PK_Especialidad", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Habitacion",
+                name: "Habitaciones",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Numero = table.Column<string>(nullable: true),
-                    Estado = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Numero = table.Column<int>(nullable: false),
+                    Estado = table.Column<string>(type: "varchar(60)", nullable: false),
                     ClinicaId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Habitacion", x => x.Id);
+                    table.PrimaryKey("PK_Habitaciones", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Habitacion_Clinica_ClinicaId",
+                        name: "FK_Habitaciones_Clinicas_ClinicaId",
                         column: x => x.ClinicaId,
-                        principalTable: "Clinica",
-                        principalColumn: "ClinicaId",
+                        principalTable: "Clinicas",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -62,28 +62,22 @@ namespace WSClinica.Migrations
                 {
                     IdMedico = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombre = table.Column<string>(type: "varchar(50)", nullable: false),
                     Apellido = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Nombre = table.Column<string>(type: "varchar(50)", nullable: false),
+                    EspecialidadId = table.Column<string>(nullable: true),
                     Matricula = table.Column<int>(nullable: false),
                     FechaNacimiento = table.Column<DateTime>(nullable: true),
-                    EspecialidadId = table.Column<int>(nullable: false),
-                    ClinicaId = table.Column<int>(nullable: true)
+                    EspecialidadId1 = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Medico", x => x.IdMedico);
                     table.ForeignKey(
-                        name: "FK_Medico_Clinica_ClinicaId",
-                        column: x => x.ClinicaId,
-                        principalTable: "Clinica",
-                        principalColumn: "ClinicaId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Medico_Especialidad_EspecialidadId",
-                        column: x => x.EspecialidadId,
+                        name: "FK_Medico_Especialidad_EspecialidadId1",
+                        column: x => x.EspecialidadId1,
                         principalTable: "Especialidad",
-                        principalColumn: "EspecialidadId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,18 +89,11 @@ namespace WSClinica.Migrations
                     Nombre = table.Column<string>(type: "varchar(50)", nullable: false),
                     Apellido = table.Column<string>(type: "varchar(50)", nullable: false),
                     NroHistClinica = table.Column<int>(nullable: false),
-                    MedicoIdMedico = table.Column<int>(nullable: true),
-                    ClinicaId = table.Column<int>(nullable: true)
+                    MedicoIdMedico = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Paciente", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Paciente_Clinica_ClinicaId",
-                        column: x => x.ClinicaId,
-                        principalTable: "Clinica",
-                        principalColumn: "ClinicaId",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Paciente_Medico_MedicoIdMedico",
                         column: x => x.MedicoIdMedico,
@@ -116,24 +103,14 @@ namespace WSClinica.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Habitacion_ClinicaId",
-                table: "Habitacion",
+                name: "IX_Habitaciones_ClinicaId",
+                table: "Habitaciones",
                 column: "ClinicaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Medico_ClinicaId",
+                name: "IX_Medico_EspecialidadId1",
                 table: "Medico",
-                column: "ClinicaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Medico_EspecialidadId",
-                table: "Medico",
-                column: "EspecialidadId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Paciente_ClinicaId",
-                table: "Paciente",
-                column: "ClinicaId");
+                column: "EspecialidadId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Paciente_MedicoIdMedico",
@@ -144,16 +121,16 @@ namespace WSClinica.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Habitacion");
+                name: "Habitaciones");
 
             migrationBuilder.DropTable(
                 name: "Paciente");
 
             migrationBuilder.DropTable(
-                name: "Medico");
+                name: "Clinicas");
 
             migrationBuilder.DropTable(
-                name: "Clinica");
+                name: "Medico");
 
             migrationBuilder.DropTable(
                 name: "Especialidad");

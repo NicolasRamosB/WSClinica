@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WSClinica.Data;
 
 namespace WSClinica.Migrations
 {
     [DbContext(typeof(DBClinicaContext))]
-    partial class DBClinicaContextModelSnapshot : ModelSnapshot
+    [Migration("20230123223814_dos")]
+    partial class dos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,7 +94,10 @@ namespace WSClinica.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("EspecialidadId")
+                    b.Property<string>("EspecialidadId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("EspecialidadId1")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("FechaNacimiento")
@@ -107,7 +112,7 @@ namespace WSClinica.Migrations
 
                     b.HasKey("IdMedico");
 
-                    b.HasIndex("EspecialidadId");
+                    b.HasIndex("EspecialidadId1");
 
                     b.ToTable("Medico");
                 });
@@ -153,9 +158,7 @@ namespace WSClinica.Migrations
                 {
                     b.HasOne("WSClinica.Models.Especialidad", "Especialidad")
                         .WithMany("Medicos")
-                        .HasForeignKey("EspecialidadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EspecialidadId1");
                 });
 
             modelBuilder.Entity("WSClinica.Models.Paciente", b =>
